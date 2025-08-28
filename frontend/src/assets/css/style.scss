@@ -210,6 +210,23 @@ footer {
     width: 450px;
 }
 
+.sidebar{
+    ul{
+        li{
+            border-bottom: 1px solid rgba(6, 17, 35, 0.2);
+            margin-bottom: 2px;
+            a{
+                display: block;
+                padding: 10px;
+                color: $primary-black;
+                &:hover{
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+}
+
 @media (max-width: 768px) and (min-width: 200px) {
     .section-1 {
         .swiper {
