@@ -1,6 +1,7 @@
 import React from 'react'
 import { useContext } from 'react'
 import { AdminAuthContext } from '../context/AdminAuth'
+import { Link } from 'react-router-dom'
 
 const Slidebar = () => {
     const { logout } = useContext(AdminAuthContext);
@@ -12,7 +13,7 @@ const Slidebar = () => {
                         <a href="">Dashboard</a>
                     </li>
                     <li>
-                        <a href="">Categories</a>
+                        <Link to="/admin/categories">Categories</Link>
                     </li>
                     <li>
                         <a href="">Brands</a>
