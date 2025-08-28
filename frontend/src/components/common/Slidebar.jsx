@@ -16,7 +16,7 @@ const Slidebar = () => {
                         <Link to="/admin/categories">Categories</Link>
                     </li>
                     <li>
-                        <a href="">Brands</a>
+                        <Link to="/admin/brands">Brands</Link>
                     </li>
                     <li>
                         <a href="">Products</a>
