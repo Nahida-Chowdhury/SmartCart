@@ -33,27 +33,31 @@ const Show = () => {
                 }
             })
     }
-    const deleteProduct = async (id) => {
-        if (confirm("Are you sure you want to delete?")) {
+
+    const deleteProduct = async () => {
+        if (confirm("Are you sure you want to delete this product?")) {
             const res = await fetch(`${apiUrl}/products/${id}`, {
-                method: 'DELETE',
+                method: "DELETE",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${adminToken()}`
-                }
-            }).then(res => res.json())
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": `Bearer ${adminToken()}`,
+                },
+            })
+                .then(res => res.json())
                 .then(result => {
                     if (result.status === 200) {
-                        const newProducts = products.filter(product => product.id != id)
+                        const newProducts = products.filter(product => product.id !== id)
                         setProducts(newProducts)
                         toast.success(result.message)
                     } else {
-                        console.log("Something went wrong!")
+                        toast.error(result.message)
                     }
-                })
+                });
         }
+
     }
+
     useEffect(() => {
         fetchProducts()
     }, []);
@@ -104,7 +108,7 @@ const Show = () => {
                                                                 {
                                                                     (product.image_url == "") ? <img src="https://placehold.co/500x500" alt="" /> : <img src={product.image_url} alt="" width={50} />
                                                                 }
-                                                                
+
                                                             </td>
                                                             <td>{product.title}</td>
                                                             <td>${product.price}</td>
