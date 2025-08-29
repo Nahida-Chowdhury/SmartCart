@@ -92,9 +92,9 @@ function App() {
           <Route
             path="/admin/products"
             element={
-              //<AdminRequireAuth>
+              <AdminRequireAuth>
                 <ShowProducts />
-              //</AdminRequireAuth>
+              </AdminRequireAuth>
             }
           />
           <Route

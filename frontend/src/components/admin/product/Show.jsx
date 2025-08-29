@@ -44,7 +44,7 @@ const Show = () => {
                         <h4 className='h4 pb-0 mb-0'>
                             Products
                         </h4>
-                        <Link to="" className='btn btn-primary'>Button</Link>
+                        <Link to="/admin/products/create" className='btn btn-primary'>Create</Link>
                     </div>
                     <div className='col-md-3'>
                         <Slidebar />
