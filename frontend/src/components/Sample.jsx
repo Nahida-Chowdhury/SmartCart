@@ -5,7 +5,7 @@ import Slidebar from '../components/common/Slidebar'
 const Sample = () => {
     return (
         <Layout>
-            <div className='container-fluid'>
+            <div className='container-fluid pb-5'>
                 <div className='row'>
                     <div className='d-flex justify-content-between mt-5 pb-3'>
                         <h4 className='h4 pb-0 mb-0'>
