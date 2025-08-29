@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import Layout from '../../common/Layout'
-import { Link, useNavigate } from 'react-router-dom'
-import Slidebar from '../../common/Slidebar'
-import { toast } from 'react-toastify'
-import { adminToken, apiUrl } from '../../common/http'
-import { useForm } from 'react-hook-form'
+import React, { useState, useEffect } from "react";
+import Layout from "../../common/Layout";
+import { Link, useNavigate } from "react-router-dom";
+import Slidebar from "../../common/Slidebar";
+import { toast } from "react-toastify";
+import { adminToken, apiUrl } from "../../common/http";
+import { useForm } from "react-hook-form";
 
 const Create = () => {
-  const [disable, setDisable] = useState(false)
-  const navigate = useNavigate()
+  const [disable, setDisable] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -17,85 +17,96 @@ const Create = () => {
   } = useForm();
 
   const saveBrand = async (data) => {
-    console.log(data)
-    setDisable(true)
+    console.log(data);
+    setDisable(true);
 
     const res = await fetch(`${apiUrl}/brands`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${adminToken()}`
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${adminToken()}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .then(result => {
-        setDisable(false)
+      .then((res) => res.json())
+      .then((result) => {
+        setDisable(false);
 
         if (result.status === 200) {
-          toast.success(result.message)
-          navigate('/admin/brands')
+          toast.success(result.message);
+          navigate("/admin/brands");
         } else {
-          console.log("Something went wrong!")
+          console.log("Something went wrong!");
         }
-      })
-  }
+      });
+  };
   return (
     <Layout>
-      <div className='container-fluid pb-5'>
-        <div className='row'>
-          <div className='d-flex justify-content-between mt-5 pb-3'>
-            <h4 className='h4 pb-0 mb-0'>
-              Brands / Create
-            </h4>
-            <Link to="/admin/brands" className='btn btn-primary'>Back</Link>
+      <div className="container-fluid pb-5">
+        <div className="row">
+          <div className="d-flex justify-content-between mt-5 pb-3">
+            <h4 className="h4 pb-0 mb-0">Brands / Create</h4>
+            <Link to="/admin/brands" className="btn btn-primary">
+              Back
+            </Link>
           </div>
-          <div className='col-md-3'>
+          <div className="col-md-3">
             <Slidebar />
           </div>
-          <div className='col-md-9'>
+          <div className="col-md-9">
             <form onSubmit={handleSubmit(saveBrand)}>
-              <div className='card shadow'>
-                <div className='card-body p-4'>
-                  <div className='mb-3'>
-                    <label className='form-label'>Name</label>
+              <div className="card shadow">
+                <div className="card-body p-4">
+                  <div className="mb-3">
+                    <label className="form-label">Name</label>
                     <input
-                      {
-                      ...register('name', { required: 'The name field is required' })
-                      }
+                      {...register("name", {
+                        required: "The name field is required",
+                      })}
                       type="text"
-                      className={`form-control ${errors.name && 'is-invalid'}`}
-                      placeholder='Enter category name'
+                      className={`form-control ${errors.name && "is-invalid"}`}
+                      placeholder="Enter brand name"
                     />
-                    {
-                      errors.name && <p className='invalid-feedback'>{errors.name?.message}</p>
-                    }
+                    {errors.name && (
+                      <p className="invalid-feedback">{errors.name?.message}</p>
+                    )}
                   </div>
-                  <div className='mb-3'>
-                    <label className='form-label'>Status</label>
+                  <div className="mb-3">
+                    <label className="form-label">Status</label>
                     <select
-                      {
-                      ...register('status', { required: 'Please select a status' })
-                      }
-                      className={`form-control ${errors.status && 'is-invalid'}`}>
+                      {...register("status", {
+                        required: "Please select a status",
+                      })}
+                      className={`form-control ${
+                        errors.status && "is-invalid"
+                      }`}
+                    >
                       <option value="">Select a Status</option>
                       <option value="1">Active</option>
                       <option value="0">Block</option>
                     </select>
-                    {
-                      errors.status && <p className='invalid-feedback'>{errors.status?.message}</p>
-                    }
+                    {errors.status && (
+                      <p className="invalid-feedback">
+                        {errors.status?.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
-              <button disabled={disable} type='submit' className='btn btn-primary mt-3'>Create</button>
+              <button
+                disabled={disable}
+                type="submit"
+                className="btn btn-primary mt-3"
+              >
+                Create
+              </button>
             </form>
           </div>
         </div>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default Create
+export default Create;
