@@ -96,13 +96,15 @@ const Show = () => {
                     <tbody>
                       {products.map((product) => {
                         return (
-                          <tr>
+                          <tr key={product.id}>
                             <td>{product.id}</td>
                             <td>
-                              {product.image_url == "" ? (
+                              {!product.image_url ||
+                              product.image_url === "" ? (
                                 <img
                                   src="https://placehold.co/500x500"
                                   alt=""
+                                  width={50}
                                 />
                               ) : (
                                 <img
@@ -110,7 +112,7 @@ const Show = () => {
                                   alt=""
                                   width={50}
                                 />
-                              )}
+                              )}{" "}
                             </td>
                             <td>{product.title}</td>
                             <td>${product.price}</td>

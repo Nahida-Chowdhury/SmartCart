@@ -37,28 +37,41 @@ const Create = ({ placeholder }) => {
   const saveProduct = async (data) => {
     const formDate = { ...data, description: content, gallery: gallery };
     setDisable(true);
-    const res = await fetch(`${apiUrl}/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${adminToken()}`,
-      },
-      body: JSON.stringify(formDate),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setDisable(false);
-        if (result.status === 200) {
-          toast.success(result.message);
-          navigate("/admin/products");
-        } else {
-          const formErrors = result.errors;
-          Object.keys(formErrors).forEach((field) => {
-            setError(field, { message: formErrors[field][0] });
-          });
-        }
+
+    try {
+      const res = await fetch(`${apiUrl}/products`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${adminToken()}`,
+        },
+        body: JSON.stringify(formDate),
       });
+
+      const result = await res.json();
+      setDisable(false);
+
+      console.log("API Response:", result); // Debugging
+
+      if (result.status === 200) {
+        toast.success(result.message);
+        navigate("/admin/products");
+      } else if (result.errors) {
+        // Handle validation errors
+        const formErrors = result.errors;
+        Object.keys(formErrors).forEach((field) => {
+          setError(field, { message: formErrors[field][0] });
+        });
+      } else {
+        // Handle server errors (500, etc.)
+        toast.error(result.message || "Server error occurred");
+      }
+    } catch (error) {
+      setDisable(false);
+      console.error("Fetch error:", error);
+      toast.error("Network error occurred");
+    }
   };
   const fetchCategories = async () => {
     const res = await fetch(`${apiUrl}/categories`, {
