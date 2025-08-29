@@ -18,6 +18,11 @@ class ProductController extends Controller
     {
         $products = Product::orderBy('created_at', 'DESC')->get();
 
+        // $products->map(function ($product) {
+        //     $product->image_url = $product->image ? asset('uploads/products/small/' . $product->image) : null;
+        //     return $product;
+        // });
+
         return response()->json([
             'status' => 200,
             'data' => $products

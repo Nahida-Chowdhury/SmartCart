@@ -10,10 +10,10 @@ class Product extends Model
 
     public function getImageUrlAttribute()
     {
-        if ($this->imagen== ""){
+        if (empty($this->image)) {
             return "";
         }
 
-        return asset('/uploads/products/small/'.$this->image);
+        return asset('uploads/products/small/' . $this->image);
     }
 }
