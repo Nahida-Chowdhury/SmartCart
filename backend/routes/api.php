@@ -25,8 +25,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('brands', BrandController::class);
     Route::get('sizes', [SizeController::class, 'index']);
-    Route::resource('products', ProductController::class);
     Route::post('temp-images', [TempImageController::class, 'store']);
     Route::post('save-product-images', [ProductController::class, 'saveProductImage']);
     Route::get('change-product-default-images', [ProductController::class, 'updateDefaultImage']);
+    Route::delete('delete-product-image/{id}', [ProductController::class, 'deleteProductImage']);
+
+    Route::resource('products', ProductController::class);
 });

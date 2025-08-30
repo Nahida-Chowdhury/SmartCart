@@ -8,6 +8,7 @@ use App\Models\ProductImage;
 use App\Models\ProductSize;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -36,6 +37,8 @@ class ProductController extends Controller
     //store  in db
     public function store(Request $request)
     {
+        //\Illuminate\Support\Facades\Log::info('Product Store Request Data:', $request->all());
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'price' => 'required|numeric',
@@ -46,11 +49,14 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()) {
+            //\Illuminate\Support\Facades\Log::error('Validation Failed:', $validator->errors()->toArray());
             return response()->json([
                 'status' => 400,
                 'errors' => $validator->errors()
             ], 400);
         }
+
+        //\Illuminate\Support\Facades\Log::info('Validation passed, creating product...');
 
         $product = new Product();
         $product->title = $request->title;
@@ -209,7 +215,7 @@ class ProductController extends Controller
     //delete a single Brand
     public function destroy($id)
     {
-        $product = Product::find($id);
+        $product = Product::with('product_images')->find($id);
 
         if ($product == null) {
             return response()->json([
@@ -220,6 +226,13 @@ class ProductController extends Controller
         }
 
         $product->delete();
+
+        if ($product->product_images) {
+            foreach ($product->product_images() as $productImage) {
+                File::delete(public_path('uploads/products/large/' . $productImage->image));
+                File::delete(public_path('uploads/products/small/' . $productImage->image));
+            }
+        }
 
         return response()->json([
             'status' => 200,
@@ -278,6 +291,28 @@ class ProductController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Product defualt image changed successfully!',
+        ], 200);
+    }
+
+    public function deleteProductImage($id)
+    {
+        $productImage = ProductImage::find($id);
+
+        if ($productImage == null) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Image Not Found',
+            ], 404);
+        }
+
+        File::delete(public_path('uploads/products/large/' . $productImage->image));
+        File::delete(public_path('uploads/products/small/' . $productImage->image));
+
+        $productImage->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Product image deleted successfully!',
         ], 200);
     }
 }
