@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Layout from "../../common/Layout";
-import Slidebar from "../../common/Slidebar";
+import Slidebar from "../../common/Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { adminToken, apiUrl } from "../../common/http";

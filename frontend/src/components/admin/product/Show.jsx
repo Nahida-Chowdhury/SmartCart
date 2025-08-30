@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../common/Layout";
-import Slidebar from "../../common/Slidebar";
+import Slidebar from "../../common/Sidebar";
 import { Link } from "react-router-dom";
 import { adminToken, apiUrl } from "../../common/http";
 import Loader from "../../common/Loader";

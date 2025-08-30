@@ -1,24 +1,24 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './components/Home'
-import Shop from './components/Shop'
-import Product from './components/Product'
-import Cart from './components/Cart'
-import Checkout from './components/Checkout'
-import Login from './components/admin/Login'
-import { ToastContainer, toast } from 'react-toastify'
-import Dashboard from './components/admin/Dashboard'
-import { AdminRequireAuth } from './components/admin/AdminRequireAuth'
-import 'react-toastify/dist/ReactToastify.css';
-import {default as ShowCategories} from './components/admin/category/Show'
-import {default as CreateCategoy} from './components/admin/category/Create'
-import {default as EditCategory} from './components/admin/category/Edit'
-import {default as ShowBrands} from './components/admin/brand/Show'
-import {default as CreateBrand} from './components/admin/brand/Create'
-import {default as EditBrand} from './components/admin/brand/Edit'
-import {default as ShowProducts} from './components/admin/product/Show'
-import {default as CreateProduct} from './components/admin/product/Create'
-import {default as EditProduct} from './components/admin/product/Edit'
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Shop from "./components/Shop";
+import Product from "./components/Product";
+import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
+import Login from "./components/admin/Login";
+import { ToastContainer, toast } from "react-toastify";
+import Dashboard from "./components/admin/Dashboard";
+import { AdminRequireAuth } from "./components/admin/AdminRequireAuth";
+import "react-toastify/dist/ReactToastify.css";
+import { default as ShowCategories } from "./components/admin/category/Show";
+import { default as CreateCategoy } from "./components/admin/category/Create";
+import { default as EditCategory } from "./components/admin/category/Edit";
+import { default as ShowBrands } from "./components/admin/brand/Show";
+import { default as CreateBrand } from "./components/admin/brand/Create";
+import { default as EditBrand } from "./components/admin/brand/Edit";
+import { default as ShowProducts } from "./components/admin/product/Show";
+import { default as CreateProduct } from "./components/admin/product/Create";
+import { default as EditProduct } from "./components/admin/product/Edit";
+import ShowOrders from "./components/admin/orders/showOrders";
 
 function App() {
   return (
@@ -113,12 +113,20 @@ function App() {
               </AdminRequireAuth>
             }
           />
-          
+
+          <Route
+            path="/admin/orders"
+            element={
+              <AdminRequireAuth>
+                <ShowOrders />
+              </AdminRequireAuth>
+            }
+          />
         </Routes>
       </BrowserRouter>
       <ToastContainer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

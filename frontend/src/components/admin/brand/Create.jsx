@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../common/Layout";
 import { Link, useNavigate } from "react-router-dom";
-import Slidebar from "../../common/Slidebar";
+import Slidebar from "../../common/Sidebar";
 import { toast } from "react-toastify";
 import { adminToken, apiUrl } from "../../common/http";
 import { useForm } from "react-hook-form";
