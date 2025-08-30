@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\front\AccountController;
+use App\Http\Controllers\front\OrderController;
 use App\Http\Controllers\front\ProductController as FrontProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,16 +19,18 @@ Route::get('get-categories', [FrontProductController::class, 'getCategories']);
 Route::get('get-brands', [FrontProductController::class, 'getbrands']);
 Route::get('get-products', [FrontProductController::class, 'getProducts']);
 Route::get('get-product/{id}', [FrontProductController::class, 'getProduct']);
-Route::get('register', [AccountController::class, 'register']);
-Route::get('login', [AccountController::class, 'authenticate']);
+Route::post('register', [AccountController::class, 'register']);
+Route::post('login', [AccountController::class, 'authenticate']);
 
-
+Route::group(['middleware' => ['auth:sanctum', 'chechUserRole']], function () {
+    Route::post('save-order', [OrderController::class, 'saveOrder']);
+});
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::group(['middleware' => ['auth:sanctum', 'chechAdminRole']], function () {
     //Route::get('categories', [CategoryController::class, 'index']);
     //Route::post('categories', [CategoryController::class, 'store']);
     // Route::get('categories/{id}', [CategoryController::class, 'show']);

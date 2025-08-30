@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('mobile');
             $table->string('address');
+            $table->string('state');
             $table->string('city');
             $table->string('zip');
             $table->timestamps();
