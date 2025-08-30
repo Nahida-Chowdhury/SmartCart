@@ -82,7 +82,7 @@ class AccountController extends Controller
             'user_id' => $request->user()->id,
             'id' => $id
         ])
-            ->with('items')
+            ->with('items', 'items.product')
             ->first();
 
         if ($order == null) {
