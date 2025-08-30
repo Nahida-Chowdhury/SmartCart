@@ -24,6 +24,7 @@ Route::post('login', [AccountController::class, 'authenticate']);
 
 Route::group(['middleware' => ['auth:sanctum', 'chechUserRole']], function () {
     Route::post('save-order', [OrderController::class, 'saveOrder']);
+    Route::get('get-order-details/{id}', [AccountController::class, 'getOrderDetails']);
 });
 
 // Route::get('/user', function (Request $request) {
