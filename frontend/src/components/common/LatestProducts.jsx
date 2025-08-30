@@ -1,7 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProductImg from '../../assets/images/eight.jpg';
+import { apiUrl } from '../common/http'
 
-const LatestProducts = () => {
+const LatestProducts = async () => {
+
+    const [products, setProducts] = useState([])
+
+    const latestProducts = () => {
+        fetch(apiUrl + '/get-latest-products', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application',
+            }
+        }).then(res => res.json())
+            .then(result => {
+                setProducts(result.data)
+            })
+    }
+
+    useEffect(() => {
+        latestProducts();
+    }, [])
     return (
         <section className='section-2 pt-5'>
             <div className='container-fluid px-5'>
@@ -9,58 +29,28 @@ const LatestProducts = () => {
                     New Arrivals
                 </h2>
                 <div className='row mt-4'>
-                    <div className='col-md-3 col-6'>
-                        <div className='product card border-0'>
-                            <div className='card-img'>
-                                <img src={ProductImg} alt="" className='w-100' />
-                            </div>
-                            <div className='card-body pt-3'>
-                                <a href="">Red Check Shirt for Men</a>
-                                <div className='price mt-2'>
-                                    $50.00 <span className='text-decoration-line-through'>$80</span>
+                    {
+                        products && products.map(product => {
+                            return (
+                                <div className='col-md-3 col-6'>
+                                    <div className='product card border-0'>
+                                        <div className='card-img'>
+                                            <img src={product.image_url} alt="" className='w-100' />
+                                        </div>
+                                        <div className='card-body pt-3'>
+                                            <a href="">{product.title}</a>
+                                            <div className='price mt-2'>
+                                                ${product.price} &nbsp
+                                                {
+                                                    product.compare_price && <span className='text-decoration-line-through'>${product.compare_price}</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='col-md-3 col-6'>
-                        <div className='product card border-0'>
-                            <div className='card-img'>
-                                <img src={ProductImg} alt="" className='w-100' />
-                            </div>
-                            <div className='card-body pt-3'>
-                                <a href="">Red Check Shirt for Men</a>
-                                <div className='price mt-2'>
-                                    $50.00 <span className='text-decoration-line-through'>$80</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='col-md-3 col-6'>
-                        <div className='product card border-0'>
-                            <div className='card-img'>
-                                <img src={ProductImg} alt="" className='w-100' />
-                            </div>
-                            <div className='card-body pt-3'>
-                                <a href="">Red Check Shirt for Men</a>
-                                <div className='price mt-2'>
-                                    $50.00 <span className='text-decoration-line-through'>$80</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='col-md-3 col-6'>
-                        <div className='product card border-0'>
-                            <div className='card-img'>
-                                <img src={ProductImg} alt="" className='w-100' />
-                            </div>
-                            <div className='card-body pt-3'>
-                                <a href="">Red Check Shirt for Men</a>
-                                <div className='price mt-2'>
-                                    $50.00 <span className='text-decoration-line-through'>$80</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            )
+                        })
+                    }
                 </div>
             </div>
         </section>
