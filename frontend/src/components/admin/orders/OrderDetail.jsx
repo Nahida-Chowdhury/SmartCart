@@ -1,9 +1,11 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { data, Link, useParams } from "react-router-dom";
 import Sidebar from "../../common/Sidebar";
 import Layout from "../../common/Layout";
 import { apiUrl, adminToken } from "../../common/http";
 import Loader from "../../common/Loader";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const OrderDetail = () => {
   const [order, setOrder] = useState([]);
@@ -11,7 +13,15 @@ const OrderDetail = () => {
   const [loader, setLoader] = useState(false);
 
   const params = useParams();
-  const fetchOrder = async () => {
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const fetchOrder = async (data) => {
     setLoader(true);
 
     const res = await fetch(`${apiUrl}/orders/${params.id}`, {
@@ -30,6 +40,40 @@ const OrderDetail = () => {
           //console.log(result);
           setOrder(result.data);
           setItems(result.data.items);
+          reset({
+            status: result.data.status,
+            payment_status: result.data.payment_status,
+          });
+        } else {
+          console.log("Something went wrong!");
+        }
+      });
+  };
+
+  const updateOrder = async () => {
+    setLoader(true);
+
+    const res = await fetch(`${apiUrl}/update-order/${params.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${adminToken()}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setLoader(false);
+
+        if (result.status === 200) {
+          //console.log(result);
+          setOrder(result.data);
+          reset({
+            status: result.data.status,
+            payment_status: result.data.payment_status,
+          });
+          toast.success(result.message);
         } else {
           console.log("Something went wrong!");
         }
@@ -183,7 +227,41 @@ const OrderDetail = () => {
               </div>
               <div className="col-md-3">
                 <div className="card shadow">
-                  <div className="card-body p-4"></div>
+                  <div className="card-body p-4">
+                    <form onSubmit={handleSubmit(updateOrder)}>
+                      <div className="mb-3">
+                        <label className="form-label" htmlFor="status">
+                          Status
+                        </label>
+                        <select
+                          {...register("status", { required: true })}
+                          id="status"
+                          className="form-select"
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="shipped">Shipped</option>
+                          <option value="delivered">Delivered</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label" htmlFor="payment-status">
+                          Payment Status
+                        </label>
+                        <select
+                          {...register("payment-status", { required: true })}
+                          id="payment-status"
+                          className="form-select"
+                        >
+                          <option value="paid">Paid</option>
+                          <option value="not paid">Not Paid</option>
+                        </select>
+                      </div>
+                      <button type="submit" className="btn btn-primary">
+                        Submit
+                      </button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
