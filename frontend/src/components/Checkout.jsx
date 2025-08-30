@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 
 const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState('cod');
-    const { cartData, subTotal,grandTotal, shipping } = useContext(CartContext)
+    const { cartData, subTotal, grandTotal, shipping } = useContext(CartContext)
     const navigate = useNavigate()
 
     const handlePaymentMethod = (e) => {
@@ -20,20 +20,45 @@ const Checkout = () => {
         register,
         handleSubmit,
         watch,
+        reset,
         setError,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        defaultValues: async () => {
+            fetch(`${apiUrl}/get-profile-details`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer${userToken()}`
+                }
+            })
+                .then(res => res.json())
+                .then(result => {
+                    reset({
+                        name: result.data.name,
+                        email: result.data.email,
+                        address: result.data.address,
+                        city: result.data.city,
+                        state: result.data.state,
+                        zip: result.data.zip,
+                        mobile: result.data.mobile,
+                    })
+                })
+        }
+    });
 
     const processOrder = (data) => {
         console.log(data)
-        if(paymentMethod == 'cod'){
+        if (paymentMethod == 'cod') {
             saveOrder(data, 'not paid')
         }
     }
 
-    const saveOrder = (formData, paymentStatus) =>{
-        const newFormData = { ...formData, 
-            grand_total: grandTotal(), 
+    const saveOrder = (formData, paymentStatus) => {
+        const newFormData = {
+            ...formData,
+            grand_total: grandTotal(),
             sub_total: subTotal(),
             shipping: shipping(),
             discount: 0,
@@ -41,24 +66,24 @@ const Checkout = () => {
             status: 'pending',
             cart: cartData
         }
-        fetch(`${apiUrl}/save-order`,{
+        fetch(`${apiUrl}/save-order`, {
             method: 'POST',
-            headers : {
-                'Content-type' : 'application/json',
-                'Accept' : 'application/json',
-                'Authorization' : `Bearer ${userToken()}`
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${userToken()}`
             },
             body: JSON.stringify(newFormData)
         }).then(res => res.json())
-        .then(result => {
-            if(result.status === 200){
-                localStorage.removeItem('cart')
-                navigate(`/order/confirmation/${result.id}`)
-            }else{
-                toast.error(result.message)
-            }
-            console.log(result)
-        })
+            .then(result => {
+                if (result.status === 200) {
+                    localStorage.removeItem('cart')
+                    navigate(`/order/confirmation/${result.id}`)
+                } else {
+                    toast.error(result.message)
+                }
+                console.log(result)
+            })
     }
     return (
         <Layout>
