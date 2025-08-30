@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductSize;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::orderBy('created_at', 'DESC')
-            ->with('product_images')
+            ->with('product_images', 'product_sizes')
             ->get();
 
         // $products->map(function ($product) {
@@ -66,6 +67,18 @@ class ProductController extends Controller
         $product->barcode = $request->barcode;
         $product->save();
 
+        if (!empty($request->sizes)) {
+
+            ProductSize::where('product_id', $product->id)->delete();
+
+            foreach ($request->sizes as $sizeId) {
+                $productSize = new ProductSize();
+                $productSize->size_id = $sizeId;
+                $productSize->product_id = $product->id;
+                $productSize->save();
+            }
+        }
+
         //save product images
         if (!empty($request->gallery)) {
             foreach ($request->gallery as $key => $tempImageId) {
@@ -110,7 +123,7 @@ class ProductController extends Controller
     //return a single Brand
     public function show($id)
     {
-        $product = Product::with('product_images')
+        $product = Product::with('product_images', 'product_sizes')
             ->find($id);
 
         if ($product == null) {
@@ -121,9 +134,12 @@ class ProductController extends Controller
             ], 404);
         }
 
+        $productSizes = $product->product_sizes()->pluck('size_id');
+
         return response()->json([
             'status' => 200,
-            'data' => $product
+            'data' => $product,
+            'productSizes' => $productSizes
         ]);
     }
 
@@ -144,7 +160,7 @@ class ProductController extends Controller
             'title' => 'required',
             'price' => 'required|numeric',
             'category_id' => 'required|integer',
-            'sku' => 'required|unique:products,sku,$id,id',
+            'sku' => 'required|unique:products,sku,' . $id,
             'is_featured' => 'required',
             'status' => 'required'
         ]);
@@ -169,6 +185,18 @@ class ProductController extends Controller
         $product->is_featured = $request->is_featured;
         $product->barcode = $request->barcode;
         $product->save();
+
+        if (!empty($request->sizes)) {
+
+            ProductSize::where('product_id', $product->id)->delete();
+
+            foreach ($request->sizes as $sizeId) {
+                $productSize = new ProductSize();
+                $productSize->size_id = $sizeId;
+                $productSize->product_id = $product->id;
+                $productSize->save();
+            }
+        }
 
         return response()->json([
             'status' => 200,
@@ -238,6 +266,18 @@ class ProductController extends Controller
             'status' => 200,
             'message' => 'Image has been uploaded successfully!',
             'data' => $productImage
+        ], 200);
+    }
+
+    public function updateDefaultImage(Request $request)
+    {
+        $product = Product::find($request->product_id);
+        $product->image = $request->image;
+        $product->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Product defualt image changed successfully!',
         ], 200);
     }
 }
