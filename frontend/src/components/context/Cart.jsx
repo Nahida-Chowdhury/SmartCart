@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-export const CartContext = createContext
+export const CartContext = createContext()
 export const CartProvider = ({ children }) => {
     const [cartData, setCartData] = useState(JSON.parse(localStorage.getItem('cart')) || [])
 
@@ -105,7 +105,7 @@ export const CartProvider = ({ children }) => {
     const deleteCartItem = (itemId) => {
         const newCartData = cartData.filter(item => item.id != itemId)
         setCartData(newCartData)
-        localStorage.setItem('cart', JSON.stringify(updatedCart))
+        localStorage.setItem('cart', JSON.stringify(newCartData))
     }
 
     const getQty = () => {
@@ -116,8 +116,8 @@ export const CartProvider = ({ children }) => {
         return qty;
     }
     return (
-        <CartContext.provider value={{ addToCart, cartData, grandTotal, subTotal, shipping, updateCartItem, deleteCartItem, getQty }}>
+        <CartContext.Provider value={{ addToCart, cartData, grandTotal, subTotal, shipping, updateCartItem, deleteCartItem, getQty }}>
             {children}
-        </CartContext.provider>
+        </CartContext.Provider>
     )
 }
