@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductImg from '../../assets/images/eight.jpg';
 import { apiUrl } from '../common/http'
 
