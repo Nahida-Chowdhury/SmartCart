@@ -18,18 +18,76 @@ import { default as EditBrand } from "./components/admin/brand/Edit";
 import { default as ShowProducts } from "./components/admin/product/Show";
 import { default as CreateProduct } from "./components/admin/product/Create";
 import { default as EditProduct } from "./components/admin/product/Edit";
-import ShowOrders from "./components/admin/orders/showOrders";
+import Register from "./components/Register";
+import { default as UserLogin } from "./components/Login";
+import Profile from "./components/Profile";
+import { RequireAuth } from "./components/RequireAuth";
+import Confirmation from "./components/Confirmation";
+import MyOrders from "./components/front/MyOrders";
+import OrderDetail from "./components/admin/orders/OrderDetail";
+import { default as UserOrderDetail } from "./components/front/OrderDetail";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/product" element={<Product />} />
+          <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
+          {/* <Route path="/checkout" element={<Checkout />} /> */}
+          <Route path="/account/register" element={<Register />} />
+          <Route path="/account/login" element={<UserLogin />} />
+          <Route path="/admin/login" element={<Login />} />
+
+          <Route
+            path="/account"
+            element={
+              <RequireAuth>
+                <Profile />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="/account/orders"
+            element={
+              <RequireAuth>
+                <MyOrders />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="/checkout"
+            element={
+              <RequireAuth>
+                <Checkout />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="/order/confirmation/:id"
+            element={
+              <RequireAuth>
+                <Confirmation />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="/account/order/details/:id"
+            element={
+              <RequireAuth>
+                <UserOrderDetail />
+              </RequireAuth>
+            }
+          />
+
+          {/* Admin Routes */}
           <Route path="/admin/login" element={<Login />} />
           <Route
             path="/admin/dashboard"
@@ -113,12 +171,20 @@ function App() {
               </AdminRequireAuth>
             }
           />
-
           <Route
             path="/admin/orders"
             element={
               <AdminRequireAuth>
                 <ShowOrders />
+              </AdminRequireAuth>
+            }
+          />
+
+          <Route
+            path="/admin/orders/:id"
+            element={
+              <AdminRequireAuth>
+                <OrderDetail />
               </AdminRequireAuth>
             }
           />

@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../../common/Layout";
 import { Link } from "react-router-dom";
-import Slidebar from "../../common/Sidebar";
+import Sidebar from "../../common/Sidebar";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { adminToken, apiUrl } from "../../common/http";
@@ -73,7 +73,7 @@ const Show = () => {
             </Link>
           </div>
           <div className="col-md-3">
-            <Slidebar />
+            <Sidebar />
           </div>
           <div className="col-md-9">
             <div className="card shadow">
