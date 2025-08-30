@@ -46,7 +46,7 @@ const Edit = ({ placeholder }) => {
         .then((res) => res.json())
         .then((result) => {
           setProductImages(result.data.product_images);
-          setSizesChecked(result.data.productSizes);
+          setSizesChecked(result.productSizes);
           reset({
             title: result.data.title,
             category_id: result.data.category_id,
@@ -133,35 +133,55 @@ const Edit = ({ placeholder }) => {
   };
 
   const handleFile = async (e) => {
-    const formData = new FormData();
     const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
     formData.append("image", file);
+    formData.append("product_id", params.id); // Add product_id
+
     setDisable(true);
 
-    const res = await fetch(`${apiUrl}/save-product-image`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${adminToken()}`,
-      },
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.status === 200) {
-          productImages.push(result.data);
-          setProductImages(productImages);
-        } else {
-          toast.error(result.errors.image[0]);
-        }
-        setDisable(false);
-        e.target.value = "";
+    try {
+      const res = await fetch(`${apiUrl}/save-product-images`, {
+        // Fixed URL (singular)
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${adminToken()}`,
+        },
+        body: formData,
       });
+
+      const result = await res.json();
+
+      console.log("Upload response:", result); // Debugging
+
+      if (result.status === 200) {
+        // Use functional update to avoid mutation
+        setProductImages((prevImages) => [...prevImages, result.data]);
+        toast.success(result.message);
+      } else if (result.errors) {
+        // Handle validation errors safely
+        const errorMessage =
+          result.errors?.image?.[0] ||
+          result.message ||
+          "Error uploading image";
+        toast.error(errorMessage);
+      } else {
+        toast.error(result.message || "Error uploading image");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Network error occurred");
+    } finally {
+      setDisable(false);
+      e.target.value = "";
+    }
   };
 
   const changeImage = async (image) => {
     const res = await fetch(
-      `${apiUrl}/change-product-default-image?product_id=${params.id}&image=${image}`,
+      `${apiUrl}/change-product-default-images?product_id=${params.id}&image=${image}`,
       {
         method: "GET",
         headers: {
