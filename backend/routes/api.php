@@ -51,4 +51,5 @@ Route::group(['middleware' => ['auth:sanctum', 'chechAdminRole']], function () {
 
     Route::get('orders', [AdminOrderController::class, 'index']);
     Route::get('orders/{id}', [AdminOrderController::class, 'detail']);
+    Route::get('update-order/{id}', [AdminOrderController::class, 'updateOrder']);
 });
