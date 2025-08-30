@@ -1,8 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { apiUrl } from "../common/http";
 
 export const CartContext = createContext()
 export const CartProvider = ({ children }) => {
     const [cartData, setCartData] = useState(JSON.parse(localStorage.getItem('cart')) || [])
+    const [shippingCost, setShippingCost] = useState(0)
 
     const addToCart = (product, size = null) => {
         let updatedCart = [...cartData];
@@ -76,7 +78,12 @@ export const CartProvider = ({ children }) => {
     }
 
     const shipping = () => {
-        return 0;
+        
+        let shippingAmpunt = 0
+        cartData.map(item => {
+            shippingAmpunt += item.qty * shippingCost
+        })
+        return shippingAmpunt
     }
 
     const subTotal = () => {
@@ -94,9 +101,9 @@ export const CartProvider = ({ children }) => {
     const updateCartItem = (itemId, newQty) => {
         let updatedCart = [...cartData]
         updatedCart = updatedCart.map(item =>
-            (item.id == itemId) 
-            ? { ...item, qty: newQty}
-            : item
+            (item.id == itemId)
+                ? { ...item, qty: newQty }
+                : item
         )
         setCartData(updatedCart)
         localStorage.setItem('cart', JSON.stringify(updatedCart))
@@ -109,12 +116,32 @@ export const CartProvider = ({ children }) => {
     }
 
     const getQty = () => {
-        let qty = 0 
+        let qty = 0
         cartData.map(item => {
             qty += parseInt(item.qty)
         })
         return qty;
     }
+
+    useEffect(() => {
+        fetch(`${apiUrl}/get-shipping-front`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            }
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                if (result.status === 200) {
+                    setShippingCost(result.data.shipping_charge)
+                } else {
+                    setShippingCost(0)
+                    console.log("Something went wrong!");
+                }
+            });
+    })
+
     return (
         <CartContext.Provider value={{ addToCart, cartData, grandTotal, subTotal, shipping, updateCartItem, deleteCartItem, getQty }}>
             {children}
