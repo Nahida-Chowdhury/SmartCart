@@ -32,7 +32,7 @@ const LatestProducts = async () => {
                     {
                         products && products.map(product => {
                             return (
-                                <div className='col-md-3 col-6'>
+                                <div className='col-md-3 col-6' key={`product-${product.id}`}>
                                     <div className='product card border-0'>
                                         <div className='card-img'>
                                             <img src={product.image_url} alt="" className='w-100' />
