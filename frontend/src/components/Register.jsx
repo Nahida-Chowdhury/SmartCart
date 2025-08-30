@@ -1,8 +1,8 @@
 import React from 'react'
 import Layout from '../components/common/Layout'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import {toast} from "react-toastify"
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from "react-toastify"
 import { apiUrl } from './common/http'
 
 const Register = () => {
@@ -16,9 +16,7 @@ const Register = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        console.log(data);
-
-        const res = await fetch(`${apiUrl}/admin/login`, {
+        const res = await fetch(`${apiUrl}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,16 +27,13 @@ const Register = () => {
                 console.log(result);
 
                 if (result.status === 200) {
-                    const adminInfo = {
-                        token: result.token,
-                        id: result.id,
-                        name: result.name,
-                    }
-                    localStorage.setItem('adminInfo', JSON.stringify(adminInfo));
-                    login(adminInfo);
-                    navigate("/admin/dashboard");
+                    toast.success(result.message)
+                    navigate("/account/login");
                 } else {
-                    toast.error(result.message);
+                    const formErrors = result.errors;
+                    Object.keys(formErrors).forEach((field) => {
+                        setError(field, { message: formErrors[field][0] });
+                    });
                 }
             })
     }
@@ -104,7 +99,7 @@ const Register = () => {
                             <button className='btn btn-secondary w-100'>Register</button>
 
                             <div className='d-flex justify-content-center pt-4 pb-2 '>
-                                Already have an account? &nbsp; <a href="#">Login</a> 
+                                Already have an account? &nbsp; <Link to="/account/login">Login</Link>
                             </div>
                         </div>
                     </div>
