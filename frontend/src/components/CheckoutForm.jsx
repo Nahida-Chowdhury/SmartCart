@@ -4,12 +4,18 @@ import { useForm } from "react-hook-form";
 import { apiUrl, userToken } from "./common/http";
 import { CartContext } from "./context/Cart";
 import { toast } from "react-toastify";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
 const CheckoutForm = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [userData, setUserData] = useState(null);
   const { cartData, subTotal, grandTotal, shipping } = useContext(CartContext);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState("");
+
+  const stripe = useStripe();
+  const elements = useElements();
 
   const handlePaymentMethod = (e) => {
     setPaymentMethod(e.target.value);
@@ -59,10 +65,62 @@ const CheckoutForm = () => {
     fetchUserData();
   }, [reset]);
 
-  const processOrder = (data) => {
+  const processOrder = async (data) => {
     console.log(data);
     if (paymentMethod === "cod") {
       saveOrder(data, "not paid");
+    } else {
+      // Fetch the client secret from the server
+      const response = await fetch(`${apiUrl}/create-payment-intent`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${userToken()}`,
+        },
+        body: JSON.stringify({ amount: grandTotal() * 100 }),
+      });
+
+      const result = await response.json();
+
+      if (!result.clientSecret) {
+        setPaymentStatus("Unable to process payment. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Ensure Stripe and Elements are loaded
+      if (!stripe || !elements) {
+        setPaymentStatus("Stripe is not ready. Please try again later.");
+        setLoading(false);
+        return;
+      }
+
+      const clientSecret = result.clientSecret;
+      const cardElement = elements.getElement(CardElement);
+
+      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: data.name,
+            email: data.email,
+            address: {
+              line1: data.address,
+              city: data.city,
+              state: data.state,
+              postal_code: data.zip,
+            },
+          },
+        },
+      });
+
+      if (paymentResult.error) {
+        setPaymentStatus(`Payment failed: ${paymentResult.error.message}`);
+      } else if (paymentResult.paymentIntent.status === "succeeded") {
+        saveOrder(data, "paid");
+        setPaymentStatus("Payment successful!");
+      }
     }
   };
 
@@ -342,6 +400,12 @@ const CheckoutForm = () => {
                 COD
               </label>
             </div>
+
+            {paymentMethod == "stripe" && (
+              <div className="border p-3">
+                <CardElement />
+              </div>
+            )}
 
             <div className="d-flex py-3">
               <button type="submit" className="btn btn-primary">
