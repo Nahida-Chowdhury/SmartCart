@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
@@ -26,6 +27,7 @@ Route::get('get-product/{id}', [FrontProductController::class, 'getProduct']);
 Route::post('register', [AccountController::class, 'register']);
 Route::post('login', [AccountController::class, 'authenticate']);
 Route::get('get-shipping-front', [FrontShippingController::class, 'getShipping']);
+
 
 Route::group(['middleware' => ['auth:sanctum', 'chechUserRole']], function () {
     Route::post('save-order', [OrderController::class, 'saveOrder']);
@@ -63,4 +65,10 @@ Route::group(['middleware' => ['auth:sanctum', 'chechAdminRole']], function () {
 
     Route::get('get-shipping', [ShippingController::class, 'getShipping']);
     Route::post('save-shipping', [ShippingController::class, 'updateShipping']);
+
+    // Dashboard routes
+    Route::get('/users-count', [AdminController::class, 'getUsersCount']);
+    Route::get('/orders-count', [AdminController::class, 'getOrdersCount']);
+    Route::get('/products-count', [AdminController::class, 'getProductsCount']);
+    Route::get('/recent-orders', [AdminController::class, 'getRecentOrders']);
 });
