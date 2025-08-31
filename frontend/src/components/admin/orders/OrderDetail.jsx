@@ -50,7 +50,7 @@ const OrderDetail = () => {
       });
   };
 
-  const updateOrder = async () => {
+  const updateOrder = async (data) => {
     setLoader(true);
 
     const res = await fetch(`${apiUrl}/update-order/${params.id}`, {
@@ -255,8 +255,8 @@ const OrderDetail = () => {
                           Payment Status
                         </label>
                         <select
-                          {...register("payment-status", { required: true })}
-                          id="payment-status"
+                          {...register("payment_status", { required: true })}
+                          id="payment_status"
                           className="form-select"
                         >
                           <option value="paid">Paid</option>
