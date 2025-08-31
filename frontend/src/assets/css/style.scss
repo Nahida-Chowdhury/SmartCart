@@ -62,25 +62,30 @@ ul {
     max-width: 1540px;
 }
 
-.nav-tabs{
-    .nav-link{
+.nav-tabs {
+    .nav-link {
         color: $primary-black;
     }
 }
 
 .btn {
-    &.btn-size{
+    &.btn-size {
         background-color: rgba($primary-black, 0.03);
         border-color: rgba($primary-black, 0.05);
         padding: 7px 15px;
-        &.active{
-            border-color:  rgba($primary-black, 0.20);;
+
+        &.active {
+            border-color: rgba($primary-black, 0.20);
+            ;
         }
-        &:hover{
-            border-color:  rgba($primary-black, 0.20);;
+
+        &:hover {
+            border-color: rgba($primary-black, 0.20);
+            ;
             color: $primary-black;
         }
     }
+
     &.btn-primary {
         background-color: $primary-color;
         border-color: $primary-color;
@@ -122,19 +127,23 @@ header {
 
 footer {
     background-color: $tertiary-color;
-    h2{
+
+    h2 {
         font-size: 1.5em;
     }
-    ul{
-        li{
+
+    ul {
+        li {
             margin: 10px;
-            a{
+
+            a {
                 font-size: 1.2em;
                 color: $primary-white;
             }
         }
     }
-    .spotlight{
+
+    .spotlight {
         border-top: 1px solid rgba($color: $primary-white, $alpha: 0.10);
         border-bottom: 1px solid rgba($color: $primary-white, $alpha: 0.10);
     }
@@ -163,27 +172,34 @@ footer {
     .card-img {
         overflow: hidden;
         border-radius: 10px;
+
         img {
             border-radius: 10px;
             transition: all 0.3s ease-out;
         }
     }
+
     &:hover {
         img {
             scale: 1.2;
         }
     }
+
     .card-body {
         padding: 0;
+
         a {
             font-size: 1.2em;
-            &:hover{
+
+            &:hover {
                 color: $primary-color;
             }
         }
+
         .price {
             font-size: 1.2em;
             padding-bottom: 20px;
+
             span {
                 color: rgba($color: $primary-black, $alpha: 0.5)
             }
@@ -191,27 +207,29 @@ footer {
     }
 }
 
-.product-detail{
-    .mySwiper{
-        .swiper-slide{
+.product-detail {
+    .mySwiper {
+        .swiper-slide {
             height: auto !important;
         }
     }
 
-    .price{
+    .price {
         font-weight: bold;
-        span{
+
+        span {
             color: rgba($color: $primary-black, $alpha: 0.5);
         }
     }
 }
 
-.login{
+.login {
     width: 450px;
 }
 
 .cart-bucket {
     position: relative;
+
     span {
         position: absolute;
         background-color: #F97316;
@@ -227,19 +245,61 @@ footer {
     }
 }
 
-.sidebar{
-    ul{
-        li{
+.sidebar {
+    ul {
+        li {
             border-bottom: 1px solid rgba(6, 17, 35, 0.2);
             margin-bottom: 2px;
-            a{
+
+            a {
                 display: block;
                 padding: 10px;
                 color: $primary-black;
-                &:hover{
+
+                &:hover {
                     color: $primary-color;
                 }
             }
+        }
+    }
+}
+
+// Dark theme styles
+body.dark-theme {
+    background-color: #1a1a1a;
+    color: #ffffff;
+
+    .card {
+        background-color: #2d2d2d;
+        border-color: #444;
+    }
+
+    .card-header {
+        background-color: #333;
+        border-bottom: 1px solid #444;
+        color: #fff;
+    }
+
+    .form-control,
+    .form-select {
+        background-color: #333;
+        border-color: #555;
+        color: #fff;
+
+        &:focus {
+            background-color: #333;
+            border-color: #0d6efd;
+            color: #fff;
+        }
+    }
+
+    .form-check-input {
+        background-color: #333;
+        border-color: #555;
+
+        &:checked {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
         }
     }
 }
