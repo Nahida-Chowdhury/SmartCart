@@ -132,6 +132,8 @@ const CheckoutForm = () => {
       shipping: shipping(),
       discount: 0,
       payment_status: paymentStatus,
+      payment_method: paymentMethod,
+
       status: "pending",
       cart: cartData,
     };
