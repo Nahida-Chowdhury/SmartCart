@@ -34,6 +34,15 @@ const Sidebar = () => {
             <a href="">Change Password</a>
           </li>
           <li>
+            <Link to="/admin/orders">Orders</Link>
+          </li>
+          <li>
+            <Link to="/admin/products">Products</Link>
+          </li>
+          <li>
+            <Link to="/admin/users">Users</Link>
+          </li>
+          <li>
             <a href="#" onClick={logout}>
               Logout
             </a>
