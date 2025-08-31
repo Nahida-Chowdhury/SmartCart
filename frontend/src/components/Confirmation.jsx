@@ -84,7 +84,12 @@ const Confirmation = () => {
                       )}
                     </p>
                     <p>
-                      <strong>Payment Mathod:</strong>COD
+                      <strong>Payment Mathod:</strong>
+                      {order.payment_method == "stripe" ? (
+                        <span className="badge bg-success">Stripe</span>
+                      ) : (
+                        <span className="badge bg-warning">COD</span>
+                      )}
                     </p>
                   </div>
                   <div className="col-6">
@@ -168,4 +173,5 @@ const Confirmation = () => {
     </Layout>
   );
 };
+
 export default Confirmation;
