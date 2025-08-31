@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\OrderController as AdminOrderController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\admin\TempImageController;
@@ -27,6 +29,7 @@ Route::post('register', [AccountController::class, 'register']);
 Route::post('login', [AccountController::class, 'authenticate']);
 Route::get('get-shipping-front', [FrontShippingController::class, 'getShipping']);
 
+
 Route::group(['middleware' => ['auth:sanctum', 'chechUserRole']], function () {
     Route::post('save-order', [OrderController::class, 'saveOrder']);
     Route::get('get-order-details/{id}', [AccountController::class, 'getOrderDetails']);
@@ -34,6 +37,9 @@ Route::group(['middleware' => ['auth:sanctum', 'chechUserRole']], function () {
     Route::post('update-profile', [AccountController::class, 'updateProfile']);
     Route::get('get-profile-details', [AccountController::class, 'getAccountDetails']);
     Route::post('create-payment-intent', [OrderController::class, 'createPaymentIntent']);
+
+    //setting
+    Route::post('change-password', [AccountController::class, 'changePassword']);
 });
 
 // Route::get('/user', function (Request $request) {
@@ -63,4 +69,14 @@ Route::group(['middleware' => ['auth:sanctum', 'chechAdminRole']], function () {
 
     Route::get('get-shipping', [ShippingController::class, 'getShipping']);
     Route::post('save-shipping', [ShippingController::class, 'updateShipping']);
+
+    // Dashboard routes
+    Route::get('/users-count', [AdminController::class, 'getUsersCount']);
+    Route::get('/orders-count', [AdminController::class, 'getOrdersCount']);
+    Route::get('/products-count', [AdminController::class, 'getProductsCount']);
+    Route::get('/recent-orders', [AdminController::class, 'getRecentOrders']);
+
+    // Settings routes - ADD THESE NEW ROUTES
+    Route::post('/admin/change-password', [SettingsController::class, 'changePassword']);
+    Route::post('/admin/update-profile', [SettingsController::class, 'updateProfile']);
 });

@@ -17,4 +17,17 @@ class Order extends Model
             'created_at' => 'datetime:d M, Y',
         ];
     }
+
+    //dashboard
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    protected $fillable = [
+        'user_id',
+        'grand_total',
+        'payment_status',
+        // ... other fields
+    ];
 }
