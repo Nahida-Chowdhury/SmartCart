@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->enum('payment_method', ['cod', 'stripe'])->after('payment_status')->default('cod');
         });
     }

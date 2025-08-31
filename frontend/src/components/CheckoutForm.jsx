@@ -66,7 +66,9 @@ const CheckoutForm = () => {
   }, [reset]);
 
   const processOrder = async (data) => {
-    console.log(data);
+    //console.log(data);
+    setLoading(true);
+    setPaymentStatus("");
     if (paymentMethod === "cod") {
       saveOrder(data, "not paid");
     } else {
@@ -149,6 +151,7 @@ const CheckoutForm = () => {
     })
       .then((res) => res.json())
       .then((result) => {
+        setLoading(false);
         if (result.status === 200) {
           localStorage.removeItem("cart");
           navigate(`/order/confirmation/${result.id}`);
@@ -410,10 +413,13 @@ const CheckoutForm = () => {
             )}
 
             <div className="d-flex py-3">
-              <button type="submit" className="btn btn-primary">
-                {paymentMethod === "stripe" ? "Pay Now" : "Place Order"}
+              <button disabled={loading} className="btn btn-primary">
+                {loading ? "Please wait..." : "Pay Now"}
               </button>
             </div>
+            {paymentStatus && (
+              <p className="alert alert-info mt-3">{paymentStatus}</p>
+            )}
           </div>
         </div>
       </form>
