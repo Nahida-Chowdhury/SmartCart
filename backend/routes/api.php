@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\OrderController as AdminOrderController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\front\AccountController;
@@ -27,7 +28,8 @@ Route::group(['middleware' => ['auth:sanctum', 'chechUserRole']], function () {
     Route::post('save-order', [OrderController::class, 'saveOrder']);
     Route::get('get-order-details/{id}', [AccountController::class, 'getOrderDetails']);
     Route::get('get-orders', [AccountController::class, 'getOrders']);
-    Route::get('update-profile', [AccountController::class, 'updateProfile']);
+    Route::post('update-profile', [AccountController::class, 'updateProfile']);
+    Route::get('get-profile-details', [AccountController::class, 'getAccountDetails']);
 });
 
 // Route::get('/user', function (Request $request) {
@@ -54,4 +56,8 @@ Route::group(['middleware' => ['auth:sanctum', 'chechAdminRole']], function () {
     Route::get('orders', [AdminOrderController::class, 'index']);
     Route::get('orders/{id}', [AdminOrderController::class, 'detail']);
     Route::post('update-order/{id}', [AdminOrderController::class, 'updateOrder']);
+
+    Route::get('get-shipping', [ShippingController::class, 'getShipping']);
+
+    Route::post('save-shipping', [ShippingController::class, 'updateShipping']);
 });

@@ -116,13 +116,13 @@ class AccountController extends Controller
         if ($user == null) {
             return response()->json([
                 'status' => 404,
-                'message' => 'product not found',
+                'message' => 'user not found',
                 'data' => []
             ], 404);
         }
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $request->user()->id . ', id',
+            'email' => 'required|email|unique:users,email,' . $request->user()->id . ',id',
             'city' => 'required|max:100',
             'state' => 'required|max:100',
             'zip' => 'required|max:100',
@@ -144,11 +144,29 @@ class AccountController extends Controller
         $user->zip = $request->zip;
         $user->mobile = $request->mobile;
         $user->address = $request->address;
+        $user->save();
 
         return response()->json([
             'status' => 200,
             'message' => "Profile updated successfully",
             'data' => $user,
         ], 200);
+    }
+
+    public function getAccountDetails(Request $request)
+    {
+        $user = User::find($request->user()->id);
+        if ($user == null) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'user not found',
+                'data' => []
+            ], 404);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'data' => $user,
+            ], 200);
+        }
     }
 }
