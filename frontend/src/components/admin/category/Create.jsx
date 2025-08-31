@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Layout from "../../common/Layout";
-import Slidebar from "../../common/Sidebar";
+import Sidebar from "../../common/Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { adminToken, apiUrl } from "../../common/http";
@@ -51,7 +51,7 @@ const Create = () => {
             </Link>
           </div>
           <div className="col-md-3">
-            <Slidebar />
+            <Sidebar />
           </div>
           <div className="col-md-9">
             <form onSubmit={handleSubmit(saveCategory)}>

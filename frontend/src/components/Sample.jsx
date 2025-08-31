@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "../components/common/Layout";
-import Slidebar from "./common/Sidebar";
+import Sidebar from "./common/Sidebar";
 
 const Sample = () => {
   return (
@@ -14,7 +14,7 @@ const Sample = () => {
             </Link>
           </div>
           <div className="col-md-3">
-            <Slidebar />
+            <Sidebar />
           </div>
           <div className="col-md-9">
             <div className="card shadow">
