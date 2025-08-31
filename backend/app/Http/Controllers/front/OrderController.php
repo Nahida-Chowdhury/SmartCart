@@ -24,7 +24,7 @@ class OrderController extends Controller
             $order->zip = $request->zip;
             $order->city = $request->city;
             $order->grand_total = $request->grand_total;
-            $order->subtotal = $request->subtotal;
+            $order->subtotal = $request->sub_total;
             $order->discount = $request->discount;
             $order->shipping = $request->shipping;
             $order->payment_status = $request->payment_status;
@@ -84,9 +84,5 @@ class OrderController extends Controller
             }
         } catch (\Exception $e) {
         }
-        return response()->json([
-            'status' => 500,
-            'error' => $e->getMessage()
-        ], 500);
     }
 }

@@ -155,18 +155,37 @@ class AccountController extends Controller
 
     public function getAccountDetails(Request $request)
     {
-        $user = User::find($request->user()->id);
-        if ($user == null) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'user not found',
-                'data' => []
-            ], 404);
-        } else {
+        try {
+            // Add proper authentication check
+            if (!$request->user()) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Unauthorized'
+                ], 401);
+            }
+
+            $user = User::find($request->user()->id);
+
+            if ($user == null) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'User not found',
+                    'data' => []
+                ], 404);
+            }
+
             return response()->json([
                 'status' => 200,
                 'data' => $user,
             ], 200);
+        } catch (\Exception $e) {
+            // Log the error but don't expose details to client
+            \Illuminate\Support\Facades\Log::error('Account details error: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Server error occurred'
+            ], 500);
         }
     }
 }
