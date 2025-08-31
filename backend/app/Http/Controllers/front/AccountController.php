@@ -197,4 +197,47 @@ class AccountController extends Controller
             ], 500);
         }
     }
+
+    //Settings
+    // Add this method to your AccountController
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'currentPassword' => 'required',
+            'newPassword' => 'required|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $user = User::find($request->user()->id);
+
+        if ($user == null) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // Check current password
+        if (!Hash::check($request->currentPassword, $user->password)) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Current password is incorrect'
+            ], 400);
+        }
+
+        // Update password
+        $user->password = Hash::make($request->newPassword);
+        $user->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Password changed successfully'
+        ], 200);
+    }
 }

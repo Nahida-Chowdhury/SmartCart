@@ -30,7 +30,8 @@ import Shipping from "./components/admin/shipping/Shipping";
 import { default as ShowOrders } from "./components/admin/orders/ShowOrders";
 import ErrorHandler from "./components/common/ErrorHandler";
 import NotFound from "./components/common/NotFound";
-import Settings from "./components/admin/Settings";
+import Settings from "./components/Settings"; // <-- use front Settings for user
+import AdminSettings from "./components/admin/Settings"; // <-- admin Settings
 
 function App() {
   return (
@@ -44,24 +45,6 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/account/register" element={<Register />} />
           <Route path="/account/login" element={<UserLogin />} />
-          <Route path="/admin/login" element={<Login />} />
-
-          <Route
-            path="/account"
-            element={
-              <RequireAuth>
-                <Profile />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/account/orders"
-            element={
-              <RequireAuth>
-                <MyOrders />
-              </RequireAuth>
-            }
-          />
           <Route
             path="/checkout"
             element={
@@ -79,6 +62,22 @@ function App() {
             }
           />
           <Route
+            path="/account"
+            element={
+              <RequireAuth>
+                <Profile />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/account/orders"
+            element={
+              <RequireAuth>
+                <MyOrders />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/account/order/details/:id"
             element={
               <RequireAuth>
@@ -86,8 +85,17 @@ function App() {
               </RequireAuth>
             }
           />
-
+          <Route
+            path="/account/settings"
+            element={
+              <RequireAuth>
+                <Settings />
+              </RequireAuth>
+            }
+          />{" "}
+          {/* <-- Added */}
           {/* Admin Routes */}
+          <Route path="/admin/login" element={<Login />} />
           <Route
             path="/admin/dashboard"
             element={
@@ -196,13 +204,10 @@ function App() {
             path="/admin/settings"
             element={
               <AdminRequireAuth>
-                {" "}
-                {/* ADD THIS WRAPPER */}
-                <Settings />
+                <AdminSettings />
               </AdminRequireAuth>
             }
           />
-
           {/* Catch all */}
           <Route path="*" element={<NotFound />} />
         </Routes>

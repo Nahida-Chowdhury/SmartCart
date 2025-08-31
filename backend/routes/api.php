@@ -37,6 +37,9 @@ Route::group(['middleware' => ['auth:sanctum', 'chechUserRole']], function () {
     Route::post('update-profile', [AccountController::class, 'updateProfile']);
     Route::get('get-profile-details', [AccountController::class, 'getAccountDetails']);
     Route::post('create-payment-intent', [OrderController::class, 'createPaymentIntent']);
+
+    //setting
+    Route::post('change-password', [AccountController::class, 'changePassword']);
 });
 
 // Route::get('/user', function (Request $request) {
