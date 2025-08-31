@@ -28,11 +28,176 @@ import OrderDetail from "./components/admin/orders/OrderDetail";
 import { default as UserOrderDetail } from "./components/front/OrderDetail";
 import Shipping from "./components/admin/shipping/Shipping";
 import { default as ShowOrders } from "./components/admin/orders/ShowOrders";
-import NotFound from "./components/NotFound";
+import ErrorHandler from "./components/common/ErrorHandler";
+import NotFound from "./components/common/NotFound";
 
 function App() {
   return (
     <>
+      <ErrorHandler>
+        <BrowserRouter>
+          <Routes>
+            {/* User Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:id" element={<Product />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/account/register" element={<Register />} />
+            <Route path="/account/login" element={<UserLogin />} />
+            <Route path="/admin/login" element={<Login />} />
+
+            <Route
+              path="/account"
+              element={
+                <RequireAuth>
+                  <Profile />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/account/orders"
+              element={
+                <RequireAuth>
+                  <MyOrders />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <RequireAuth>
+                  <Checkout />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/order/confirmation/:id"
+              element={
+                <RequireAuth>
+                  <Confirmation />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/account/order/details/:id"
+              element={
+                <RequireAuth>
+                  <UserOrderDetail />
+                </RequireAuth>
+              }
+            />
+
+            {/* Admin Routes */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AdminRequireAuth>
+                  <Dashboard />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/categories"
+              element={
+                <AdminRequireAuth>
+                  <ShowCategories />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/categories/create"
+              element={
+                <AdminRequireAuth>
+                  <CreateCategoy />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/categories/edit/:id"
+              element={
+                <AdminRequireAuth>
+                  <EditCategory />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/brands"
+              element={
+                <AdminRequireAuth>
+                  <ShowBrands />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/brands/create"
+              element={
+                <AdminRequireAuth>
+                  <CreateBrand />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/brands/edit/:id"
+              element={
+                <AdminRequireAuth>
+                  <EditBrand />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/products"
+              element={
+                <AdminRequireAuth>
+                  <ShowProducts />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/products/create"
+              element={
+                <AdminRequireAuth>
+                  <CreateProduct />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/products/edit/:id"
+              element={
+                <AdminRequireAuth>
+                  <EditProduct />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/orders"
+              element={
+                <AdminRequireAuth>
+                  <ShowOrders></ShowOrders>
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/orders/:id"
+              element={
+                <AdminRequireAuth>
+                  <OrderDetail />
+                </AdminRequireAuth>
+              }
+            />
+            <Route
+              path="/admin/shipping"
+              element={
+                <AdminRequireAuth>
+                  <Shipping />
+                </AdminRequireAuth>
+              }
+            />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <ToastContainer />
+      </ErrorHandler>
       <BrowserRouter>
         <Routes>
           {/* User Routes */}
