@@ -18,13 +18,17 @@ class ProductController extends Controller
 
         //filter by category
         if (!empty($request->category)) {
-            $catArray = explode(',', $request->category);
+            $catArray = is_array($request->category)
+                ? $request->category
+                : explode(',', $request->category);
             $products = $products->whereIn('category_id', $catArray);
         }
 
         //filter by brand
-        if (!empty($request->category)) {
-            $brandArray = explode(',', $request->category);
+        if (!empty($request->brand)) {  // ← Changed from category to brand
+            $brandArray = is_array($request->brand)
+                ? $request->brand
+                : explode(',', $request->brand);  // ← Changed from category to brand
             $products = $products->whereIn('brand_id', $brandArray);
         }
 
@@ -35,6 +39,7 @@ class ProductController extends Controller
             'data' => $products
         ]);
     }
+
     public function latestProducts()
     {
         $products = Product::orderBy('created_at', 'DESC')
