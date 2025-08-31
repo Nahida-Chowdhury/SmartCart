@@ -174,7 +174,7 @@ const Confirmation = () => {
                 </div>
 
                 <div className="text-center mt-4">
-                  <Link to="/orders" className="btn btn-primary">
+                  <Link to="/account/orders" className="btn btn-primary">
                     View All Orders
                   </Link>
                   <Link to="/" className="btn btn-outline-secondary ms-2">
