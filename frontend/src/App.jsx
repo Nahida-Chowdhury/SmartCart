@@ -177,7 +177,7 @@ function App() {
             path="/admin/orders"
             element={
               <AdminRequireAuth>
-                <ShowOrders />
+                <ShowOrders></ShowOrders>
               </AdminRequireAuth>
             }
           />

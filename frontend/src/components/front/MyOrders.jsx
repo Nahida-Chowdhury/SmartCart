@@ -72,9 +72,9 @@ const MyOrders = () => {
                     <tbody>
                       {orders.map((order) => {
                         return (
-                          <tr key={`order-${order_id}`}>
+                          <tr key={`order-${order.id}`}>
                             <td>
-                              <Link to={"/account/order/details/${order.id}"}>
+                              <Link to={`/account/order/details/${order.id}`}>
                                 {order.id}
                               </Link>
                             </td>

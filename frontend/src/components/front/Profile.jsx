@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import Layout from "../common/Layout";
 import { Link } from "react-router-dom";
 import UserSidebar from "../common/UserSidebar";
-import { useForm } from 'react-hook-form'
+import { useForm } from "react-hook-form";
 import { apiUrl, userToken } from "../common/http";
 import { toast } from "react-toastify";
-import Loader from "../common/Loader"
+import Loader from "../common/Loader";
 
 const Profile = () => {
-  const [loading, setloading] = useState(true)
+  const [loading, setloading] = useState(true);
   const {
     register,
     handleSubmit,
@@ -19,51 +19,55 @@ const Profile = () => {
   } = useForm({
     defaultValues: async () => {
       fetch(`${apiUrl}/get-profile-details`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer${userToken()}`
-        }
+          "Content-type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${userToken()}`,
+        },
       })
-        .then(res => res.json())
-        .then(result => {
-          setloading(false)
-          reset({
-            name: result.data.name,
-            email: result.data.email,
-            address: result.data.address,
-            city: result.data.city,
-            state: result.data.state,
-            zip: result.data.zip,
-            mobile: result.data.mobile,
-          })
-        })
-    }
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.status === 200 && result.data) {
+            reset({
+              name: result.data.name,
+              email: result.data.email,
+              address: result.data.address,
+              city: result.data.city,
+              state: result.data.state,
+              zip: result.data.zip,
+              mobile: result.data.mobile,
+            });
+          } else {
+            toast.error(result.message || "Failed to load profile");
+          }
+          setloading(false);
+        });
+    },
   });
 
-  const updateAccount = async () => {
+  const updateAccount = async (data) => {
     fetch(`${apiUrl}/update-profile`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer${userToken()}`
+        "Content-type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${userToken()}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         if (result.status === 200) {
-          toast.success(result.message)
+          toast.success(result.message);
         } else {
           const formErrors = result.errors;
           Object.keys(formErrors).forEach((field) => {
             setError(field, { message: formErrors[field][0] });
           });
         }
-      })
-  }
+      });
+  };
 
   return (
     <Layout>
@@ -77,146 +81,158 @@ const Profile = () => {
             <UserSidebar />
           </div>
           <div className="col-md-9">
-            {
-              loading == true && <Loader />
-            }
-            {
-              loading == false &&
-
+            {loading == true && <Loader />}
+            {loading == false && (
               <form onSubmit={handleSubmit(updateAccount)}>
                 <div className="card shadow">
                   <div className="card-body p-4">
                     <div className="row">
                       <div className="mb-3 col-md-6">
-                        <label htmlFor="name" className="form-label">Name</label>
+                        <label htmlFor="name" className="form-label">
+                          Name
+                        </label>
                         <input
-                          {
-                          ...register('name', {
-                            required: "The name field is required."
-                          })
-                          }
+                          {...register("name", {
+                            required: "The name field is required.",
+                          })}
                           type="text"
                           id="name"
-                          className={`form-control ${errors.name && 'is-valid'}`}
+                          className={`form-control ${
+                            errors.name && "is-valid"
+                          }`}
                           placeholder="Enter Name"
                         />
-                        {
-                          errors.name && <p className='text-danger'>{errors.name?.message}</p>
-                        }
+                        {errors.name && (
+                          <p className="text-danger">{errors.name?.message}</p>
+                        )}
                       </div>
 
                       <div className="mb-3 col-md-6">
-                        <label htmlFor="email" className="form-label">Email</label>
+                        <label htmlFor="email" className="form-label">
+                          Email
+                        </label>
                         <input
-                          {
-                          ...register('email', {
+                          {...register("email", {
                             required: "The email field is required.",
                             pattern: {
                               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                              message: "Invalid email address"
-                            }
-                          })
-                          }
+                              message: "Invalid email address",
+                            },
+                          })}
                           type="text"
                           id="email"
-                          className={`form-control ${errors.email && 'is-valid'}`}
+                          className={`form-control ${
+                            errors.email && "is-valid"
+                          }`}
                           placeholder="Enter Email"
                         />
-                        {
-                          errors.email && <p className='text-danger'>{errors.email?.message}</p>
-                        }
+                        {errors.email && (
+                          <p className="text-danger">{errors.email?.message}</p>
+                        )}
                       </div>
                     </div>
                     <div className="row">
                       <div className="mb-3 col-md-6">
-                        <label htmlFor="address" className="form-label">Address</label>
+                        <label htmlFor="address" className="form-label">
+                          Address
+                        </label>
                         <textarea
-                          {
-                          ...register('address', {
-                            required: "The address field is required."
-                          })
-                          }
+                          {...register("address", {
+                            required: "The address field is required.",
+                          })}
                           id="address"
                           placeholder="Address"
-                          className={`form-control ${errors.address && 'is-valid'}`}
+                          className={`form-control ${
+                            errors.address && "is-valid"
+                          }`}
                         ></textarea>
-                        {
-                          errors.address && <p className='text-danger'>{errors.address?.message}</p>
-                        }
+                        {errors.address && (
+                          <p className="text-danger">
+                            {errors.address?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="row">
                       <div className="mb-3 col-md-6">
-                        <label htmlFor="mobile" className="form-label">Mobile</label>
+                        <label htmlFor="mobile" className="form-label">
+                          Mobile
+                        </label>
                         <input
-                          {
-                          ...register('mobile', {
-                            required: "The mobile field is required."
-                          })
-                          }
+                          {...register("mobile", {
+                            required: "The mobile field is required.",
+                          })}
                           type="text"
                           id="mobile"
-                          className={`form-control ${errors.mobile && 'is-valid'}`}
+                          className={`form-control ${
+                            errors.mobile && "is-valid"
+                          }`}
                           placeholder="Enter Mobile"
                         />
-                        {
-                          errors.mobile && <p className='text-danger'>{errors.mobile?.message}</p>
-                        }
+                        {errors.mobile && (
+                          <p className="text-danger">
+                            {errors.mobile?.message}
+                          </p>
+                        )}
                       </div>
 
                       <div className="mb-3 col-md-6">
-                        <label htmlFor="city" className="form-label">City</label>
+                        <label htmlFor="city" className="form-label">
+                          City
+                        </label>
                         <input
-                          {
-                          ...register('city', {
-                            required: "The city field is required."
-                          })
-                          }
+                          {...register("city", {
+                            required: "The city field is required.",
+                          })}
                           type="text"
                           id="city"
-                          className={`form-control ${errors.city && 'is-valid'}`}
+                          className={`form-control ${
+                            errors.city && "is-valid"
+                          }`}
                           placeholder="Enter City"
                         />
-                        {
-                          errors.city && <p className='text-danger'>{errors.city?.message}</p>
-                        }
+                        {errors.city && (
+                          <p className="text-danger">{errors.city?.message}</p>
+                        )}
                       </div>
                     </div>
                     <div className="row">
                       <div className="mb-3 col-md-6">
-                        <label htmlFor="state" className="form-label">State</label>
+                        <label htmlFor="state" className="form-label">
+                          State
+                        </label>
                         <input
-                          {
-                          ...register('state', {
-                            required: "The state field is required."
-                          })
-                          }
+                          {...register("state", {
+                            required: "The state field is required.",
+                          })}
                           type="text"
                           id="state"
-                          className={`form-control ${errors.state && 'is-valid'}`}
+                          className={`form-control ${
+                            errors.state && "is-valid"
+                          }`}
                           placeholder="Enter State"
                         />
-                        {
-                          errors.state && <p className='text-danger'>{errors.state?.message}</p>
-                        }
+                        {errors.state && (
+                          <p className="text-danger">{errors.state?.message}</p>
+                        )}
                       </div>
 
                       <div className="mb-3 col-md-6">
-                        <label htmlFor="zip" className="form-label">Zip</label>
+                        <label htmlFor="zip" className="form-label">
+                          Zip
+                        </label>
                         <input
-                          {
-                          ...register('zip', {
-                            required: "The zip field is required."
-                          })
-                          }
+                          {...register("zip", {
+                            required: "The zip field is required.",
+                          })}
                           type="text"
                           id="zip"
-                          className={`form-control ${errors.zip && 'is-valid'}`}
+                          className={`form-control ${errors.zip && "is-valid"}`}
                           placeholder="Enter Zip"
                         />
-                        {
-                          errors.zip && <p className='text-danger'>{errors.zip?.message}</p>
-                        }
+                        {errors.zip && (
+                          <p className="text-danger">{errors.zip?.message}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -224,7 +240,7 @@ const Profile = () => {
 
                 <button className="btn btn-primary mt-4 mb-5">Update</button>
               </form>
-            }
+            )}
           </div>
         </div>
       </div>

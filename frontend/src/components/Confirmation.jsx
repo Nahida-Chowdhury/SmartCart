@@ -5,13 +5,19 @@ import { toast } from "react-toastify";
 import { apiUrl, userToken } from "./common/http";
 
 const Confirmation = () => {
-  const [order, setOrder] = useState([]);
+  const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
 
   const params = useParams();
 
   const fetchOrder = () => {
+    if (!params.id || params.id === "undefined") {
+      setLoading(false);
+      toast.error("Invalid order ID");
+      return;
+    }
+
     fetch(`${apiUrl}/get-order-details/${params.id}`, {
       method: "GET",
       headers: {
@@ -23,23 +29,33 @@ const Confirmation = () => {
       .then((res) => res.json())
       .then((result) => {
         setLoading(false);
-        if (result.status == 200) {
+        if (result.status === 200) {
           setOrder(result.data);
-          setItems(result.data.items);
+          setItems(result.data.items || []);
         } else {
-          //toast.error(result.message);
+          toast.error(result.message || "Order not found");
         }
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error fetching order:", error);
+        toast.error("Failed to fetch order details");
       });
   };
 
   useEffect(() => {
     fetchOrder();
-  }, []);
+  }, [params.id]); // Add params.id as dependency
+
+  // Format date function
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
+  };
 
   return (
     <Layout>
       <div className="container py-5">
-        {loading === true && (
+        {loading && (
           <div className="text-center py-5">
             <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -47,55 +63,58 @@ const Confirmation = () => {
           </div>
         )}
 
-        {loading === false && order && (
+        {!loading && order && (
           <div>
-            <div className="row">
+            <div className="row text-center mb-4">
               <h1 className="text-center fw-bold text-success">Thank You!</h1>
-              <p className="text-muted ext-center">
-                Your order has beem successfully placed
+              <p className="text-muted">
+                Your order has been successfully placed
               </p>
             </div>
             <div className="card shadow">
-              <div className="card body">
-                <h3 className="fw-bold">Order Summery</h3>
+              <div className="card-body">
+                <h3 className="fw-bold">Order Summary</h3>
                 <hr />
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-md-6">
                     <p>
-                      <strong>Order ID:</strong>#{order_id}
+                      <strong>Order ID:</strong> #{order.id}
                     </p>
                     <p>
-                      <strong>Date:</strong>
-                      {order.created_at}
+                      <strong>Date:</strong> {formatDate(order.created_at)}
                     </p>
                     <p>
                       <strong>Status:</strong>
-                      {order.status == "pending" && (
-                        <span className="badge bg-warning">Pending</span>
+                      {order.status === "pending" && (
+                        <span className="badge bg-warning ms-2">Pending</span>
                       )}
-                      {order.status == "shipped" && (
-                        <span className="badge bg-warning">Shipped</span>
+                      {order.status === "shipped" && (
+                        <span className="badge bg-info ms-2">Shipped</span>
                       )}
-                      {order.status == "delivered" && (
-                        <span className="badge bg-success">Delivered</span>
+                      {order.status === "delivered" && (
+                        <span className="badge bg-success ms-2">Delivered</span>
                       )}
-                      {order.status == "cancelled" && (
-                        <span className="badge bg-danger">Cancelled</span>
+                      {order.status === "cancelled" && (
+                        <span className="badge bg-danger ms-2">Cancelled</span>
                       )}
                     </p>
                     <p>
-                      <strong>Payment Mathod:</strong>
-                      {order.payment_method == "stripe" ? (
-                        <span className="badge bg-success">Stripe</span>
+                      <strong>Payment Method:</strong>
+                      {order.payment_method === "stripe" ? (
+                        <span className="badge bg-success ms-2">Stripe</span>
                       ) : (
-                        <span className="badge bg-warning">COD</span>
+                        <span className="badge bg-warning ms-2">COD</span>
                       )}
                     </p>
                   </div>
-                  <div className="col-6">
+                  <div className="col-md-6">
                     <p>
                       <strong>Customer: </strong>
                       {order.name}
+                    </p>
+                    <p>
+                      <strong>Email: </strong>
+                      {order.email}
                     </p>
                     <p>
                       <strong>Address: </strong>
@@ -107,9 +126,11 @@ const Confirmation = () => {
                     </p>
                   </div>
                 </div>
-                <div className="row">
+
+                <div className="row mt-4">
                   <div className="col-12">
-                    <table className="table-striped table-bordered table">
+                    <h5>Order Items</h5>
+                    <table className="table table-striped table-bordered">
                       <thead>
                         <tr>
                           <th>Item</th>
@@ -133,40 +154,47 @@ const Confirmation = () => {
                           <td className="text-end fw-bold" colSpan={3}>
                             Subtotal
                           </td>
-                          <td>{order.subtotal}</td>
+                          <td>${order.subtotal}</td>
                         </tr>
-
                         <tr>
                           <td className="text-end fw-bold" colSpan={3}>
                             Shipping
                           </td>
-                          <td>{order.shipping}</td>
+                          <td>${order.shipping}</td>
                         </tr>
                         <tr>
                           <td className="text-end fw-bold" colSpan={3}>
                             Grand Total
                           </td>
-                          <td>{order.grand_total}</td>
+                          <td>${order.grand_total}</td>
                         </tr>
                       </tfoot>
                     </table>
                   </div>
-                  <div className="text-center">
-                    <button className="btn btn-primary">
-                      View Order Details
-                    </button>
-                    <Link to={"/"} className="btn btn-outline-secondary ms-2">
-                      Continue Shopping
-                    </Link>
-                  </div>
+                </div>
+
+                <div className="text-center mt-4">
+                  <Link to="/account/orders" className="btn btn-primary">
+                    View All Orders
+                  </Link>
+                  <Link to="/" className="btn btn-outline-secondary ms-2">
+                    Continue Shopping
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         )}
-        {loading == false && !order && (
-          <div className="row">
+
+        {!loading && !order && (
+          <div className="row text-center">
             <h1 className="text-center fw-bold text-muted">Order not found</h1>
+            <p className="text-muted">
+              The order you're looking for doesn't exist.
+            </p>
+            <Link to="/" className="btn btn-primary">
+              Continue Shopping
+            </Link>
           </div>
         )}
       </div>

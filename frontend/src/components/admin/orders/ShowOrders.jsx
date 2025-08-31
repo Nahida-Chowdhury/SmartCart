@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../../common/Sidebar";
 import { apiUrl, adminToken } from "../../common/http";
 import Loader from "../../common/Loader";
 import Nostate from "../../common/Nostate";
+import Layout from "../../common/Layout";
 
 const ShowOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -73,7 +74,7 @@ const ShowOrders = () => {
                     <tbody>
                       {orders.map((order) => {
                         return (
-                          <tr key={`order-${order_id}`}>
+                          <tr key={`order-${order.id}`}>
                             <td>
                               <Link to={`/admin/orders/${order.id}`}>
                                 {order.id}
