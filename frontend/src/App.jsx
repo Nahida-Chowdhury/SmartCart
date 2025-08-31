@@ -29,6 +29,7 @@ import { default as UserOrderDetail } from "./components/front/OrderDetail";
 import Shipping from "./components/admin/shipping/Shipping";
 import { default as ShowOrders } from "./components/admin/orders/ShowOrders";
 import NotFound from "./components/NotFound";
+import Settings from "./components/Settings";
 
 function App() {
   return (
@@ -188,6 +189,15 @@ function App() {
               <AdminRequireAuth>
                 <Shipping />
               </AdminRequireAuth>
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <RequireAuth>
+                <Settings />
+              </RequireAuth>
             }
           />
 
