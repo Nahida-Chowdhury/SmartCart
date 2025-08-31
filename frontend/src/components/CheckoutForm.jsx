@@ -130,7 +130,7 @@ const CheckoutForm = () => {
     const newFormData = {
       ...formData,
       grand_total: grandTotal(),
-      sub_total: subTotal(),
+      subtotal: subTotal(),
       shipping: shipping(),
       discount: 0,
       payment_status: paymentStatus,

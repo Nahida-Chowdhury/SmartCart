@@ -22,7 +22,7 @@ const Dashboard = () => {
                     <span>Users</span>
                   </div>
                   <div className="card-footer">
-                    <a href="#">View Users</a>
+                    <a href="">View Users</a>
                   </div>
                 </div>
               </div>
