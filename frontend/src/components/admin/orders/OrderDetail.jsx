@@ -1,5 +1,5 @@
-import React from "react";
-import { data, Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import Sidebar from "../../common/Sidebar";
 import Layout from "../../common/Layout";
 import { apiUrl, adminToken } from "../../common/http";
