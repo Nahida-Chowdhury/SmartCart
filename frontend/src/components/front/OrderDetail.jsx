@@ -176,3 +176,5 @@ const OrderDetail = () => {
     </Layout>
   );
 };
+
+export default OrderDetail;
