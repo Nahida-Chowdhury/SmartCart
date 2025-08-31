@@ -149,6 +149,6 @@ class AccountController extends Controller
             'status' => 200,
             'message' => "Profile updated successfully",
             'data' => $user,
-        ]);
+        ], 200);
     }
 }
