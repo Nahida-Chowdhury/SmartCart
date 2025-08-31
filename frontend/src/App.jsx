@@ -28,7 +28,7 @@ import OrderDetail from "./components/admin/orders/OrderDetail";
 import { default as UserOrderDetail } from "./components/front/OrderDetail";
 import Shipping from "./components/admin/shipping/Shipping";
 import { default as ShowOrders } from "./components/admin/orders/ShowOrders";
-import NotFound from "./components/NotFound"; 
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
