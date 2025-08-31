@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\OrderController as AdminOrderController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\SizeController;
 use App\Http\Controllers\admin\TempImageController;
@@ -71,4 +72,8 @@ Route::group(['middleware' => ['auth:sanctum', 'chechAdminRole']], function () {
     Route::get('/orders-count', [AdminController::class, 'getOrdersCount']);
     Route::get('/products-count', [AdminController::class, 'getProductsCount']);
     Route::get('/recent-orders', [AdminController::class, 'getRecentOrders']);
+
+    // Settings routes - ADD THESE NEW ROUTES
+    Route::post('/admin/change-password', [SettingsController::class, 'changePassword']);
+    Route::post('/admin/update-profile', [SettingsController::class, 'updateProfile']);
 });

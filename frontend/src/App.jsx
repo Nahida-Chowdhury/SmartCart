@@ -30,6 +30,7 @@ import Shipping from "./components/admin/shipping/Shipping";
 import { default as ShowOrders } from "./components/admin/orders/ShowOrders";
 import ErrorHandler from "./components/common/ErrorHandler";
 import NotFound from "./components/common/NotFound";
+import Settings from "./components/admin/Settings";
 
 function App() {
   return (
@@ -188,6 +189,16 @@ function App() {
             element={
               <AdminRequireAuth>
                 <Shipping />
+              </AdminRequireAuth>
+            }
+          />
+          <Route
+            path="/admin/settings"
+            element={
+              <AdminRequireAuth>
+                {" "}
+                {/* ADD THIS WRAPPER */}
+                <Settings />
               </AdminRequireAuth>
             }
           />
