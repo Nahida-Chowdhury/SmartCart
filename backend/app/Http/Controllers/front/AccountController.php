@@ -78,24 +78,33 @@ class AccountController extends Controller
 
     public function getOrderDetails($id, Request $request)
     {
-        $order = Order::where([
-            'user_id' => $request->user()->id,
-            'id' => $id
-        ])
-            ->with('items', 'items.product')
-            ->first();
+        try {
+            $order = Order::where([
+                'user_id' => $request->user()->id,
+                'id' => $id
+            ])
+                ->with('items', 'items.product') // This matches the fixed relationship name
+                ->first();
 
-        if ($order == null) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Order not found',
-                'data' => []
-            ], 404);
-        } else {
+            if ($order == null) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Order not found',
+                    'data' => []
+                ], 404);
+            }
+
             return response()->json([
                 'status' => 200,
-                'data' => []
+                'data' => $order // Return the actual order data, not empty array
             ], 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Server error occurred',
+                'error' => $e->getMessage() // Remove this in production
+            ], 500);
         }
     }
 
