@@ -31,7 +31,7 @@ class OrderController extends Controller
             $order->payment_method = $request->payment_method;
 
             $order->status = $request->status;
-            $order->user_id = $request->user_id;
+            $order->user_id = $request->user()->id;
             $order->save();
 
             //save order items
@@ -49,7 +49,10 @@ class OrderController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'You have successfully placed your order'
+                'message' => 'You have successfully placed your order',
+                'data' => [
+                    'id' => $order->id
+                ]
             ], 200);
         } else {
             return response()->json([

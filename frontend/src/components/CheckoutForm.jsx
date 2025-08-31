@@ -154,7 +154,7 @@ const CheckoutForm = () => {
         setLoading(false);
         if (result.status === 200) {
           localStorage.removeItem("cart");
-          navigate(`/order/confirmation/${result.id}`);
+          navigate(`/order/confirmation/${result.data?.id || result.id}`);
         } else {
           toast.error(result.message);
         }

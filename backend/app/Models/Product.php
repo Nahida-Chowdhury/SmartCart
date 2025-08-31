@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\ProductImage;
+use App\Models\ProductSize;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model

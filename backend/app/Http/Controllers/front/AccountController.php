@@ -83,14 +83,14 @@ class AccountController extends Controller
                 'user_id' => $request->user()->id,
                 'id' => $id
             ])
-                ->with('items', 'items.product') // This matches the fixed relationship name
+                ->with('items', 'items.product')
                 ->first();
 
             if ($order == null) {
                 return response()->json([
                     'status' => 404,
                     'message' => 'Order not found',
-                    'data' => []
+                    'data' => null
                 ], 404);
             }
 
