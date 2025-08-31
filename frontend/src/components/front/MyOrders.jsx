@@ -74,7 +74,7 @@ const MyOrders = () => {
                         return (
                           <tr key={`order-${order.id}`}>
                             <td>
-                              <Link to={"/account/order/details/${order.id}"}>
+                              <Link to={`/account/order/details/${order.id}`}>
                                 {order.id}
                               </Link>
                             </td>
