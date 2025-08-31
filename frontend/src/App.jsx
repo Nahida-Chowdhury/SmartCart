@@ -5,7 +5,7 @@ import Product from "./components/Product";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import Login from "./components/admin/Login";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Dashboard from "./components/admin/Dashboard";
 import { AdminRequireAuth } from "./components/admin/AdminRequireAuth";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,6 +28,7 @@ import OrderDetail from "./components/admin/orders/OrderDetail";
 import { default as UserOrderDetail } from "./components/front/OrderDetail";
 import Shipping from "./components/admin/shipping/Shipping";
 import { default as ShowOrders } from "./components/admin/orders/ShowOrders";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -39,7 +40,6 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          {/* <Route path="/checkout" element={<Checkout />} /> */}
           <Route path="/account/register" element={<Register />} />
           <Route path="/account/login" element={<UserLogin />} />
           <Route path="/admin/login" element={<Login />} />
@@ -52,7 +52,6 @@ function App() {
               </RequireAuth>
             }
           />
-
           <Route
             path="/account/orders"
             element={
@@ -61,7 +60,6 @@ function App() {
               </RequireAuth>
             }
           />
-
           <Route
             path="/checkout"
             element={
@@ -70,7 +68,6 @@ function App() {
               </RequireAuth>
             }
           />
-
           <Route
             path="/order/confirmation/:id"
             element={
@@ -79,7 +76,6 @@ function App() {
               </RequireAuth>
             }
           />
-
           <Route
             path="/account/order/details/:id"
             element={
@@ -90,7 +86,6 @@ function App() {
           />
 
           {/* Admin Routes */}
-          <Route path="/admin/login" element={<Login />} />
           <Route
             path="/admin/dashboard"
             element={
@@ -123,7 +118,6 @@ function App() {
               </AdminRequireAuth>
             }
           />
-
           <Route
             path="/admin/brands"
             element={
@@ -148,7 +142,6 @@ function App() {
               </AdminRequireAuth>
             }
           />
-
           <Route
             path="/admin/products"
             element={
@@ -181,7 +174,6 @@ function App() {
               </AdminRequireAuth>
             }
           />
-
           <Route
             path="/admin/orders/:id"
             element={
@@ -198,6 +190,8 @@ function App() {
               </AdminRequireAuth>
             }
           />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />
